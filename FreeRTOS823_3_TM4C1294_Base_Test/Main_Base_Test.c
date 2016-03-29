@@ -16,8 +16,10 @@
 #include	"driverlib/pin_map.h"
 #include	"driverlib/gpio.h"
 
+#include	"Drivers/uartstdio.h"
 #include	"FreeRTOS.h"
 #include	"task.h"
+
 
 #include	<stdio.h>
 
@@ -32,6 +34,9 @@ int main( void ) {
 	uint32_t	Status;
 
 	Status = Processor_Initialization();
+	Status = UART_Initialization();
+
+	UARTprintf("FreeRTOS Starting!");
 
 	//
 	//	Create a task to blink LED
