@@ -26,15 +26,20 @@
 
 #include "driverlib/sysctl.h"
 #include "driverlib/adc.h"
+#include "Tasks/Task_ReportData.h"
 
+#include	"Drivers/uartstdio.h"
 #include "FreeRTOS.h"
 #include "task.h"
+
 
 #include "stdio.h"
 
 //
 //	Gloabal subroutines and variables
 //
+ReportData_Item theADCReport;
+
 
 extern void Task_Simple_ADC0_Ch0( void *pvParameters ) {
 
@@ -81,9 +86,13 @@ extern void Task_Simple_ADC0_Ch0( void *pvParameters ) {
 		ADCIntClear( ADC0_BASE, 0 );
 
 		//
-		//	Print ADC_Value
+		// Output ADC_Value
 		//
-//		printf( ">>ADC_Value: %d\n", ADC_Value );
+		theADCReport.TimeStamp = xPortSysTickCount;
+		theADCReport.ReportName = 2;
+		theADCReport.ReportValue_0 = ADC_Value;
+		theADCReport.ReportValue_1 = 0;
+		xQueueSend( ReportData_Queue, &theADCReport, 0 );
 
 		//
 		//	Delay one (1) second.
