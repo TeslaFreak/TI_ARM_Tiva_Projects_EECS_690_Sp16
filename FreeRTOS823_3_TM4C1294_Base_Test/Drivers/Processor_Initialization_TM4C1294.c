@@ -24,7 +24,7 @@
 #include	"driverlib/uart.h"
 #include	"driverlib/FPU.h"
 
-//#include	"Drivers/uartstdio.h"
+#include	"Drivers/uartstdio.h"
 #include	"Drivers/Processor_Initialization.h"
  
 //*****************************************************************************
@@ -82,25 +82,21 @@ extern uint32_t Processor_Initialization() {
 //		PortA<1..0>.
 //
 //*****************************************************************************
-/*
- *	Remove until UART situation resolved on TM4C1294.
- *	-- GJM B60210
+
 
 
 extern uint32_t UART_Initialization() {
 
-	if ( UARTStdioInitFlag == 0 ) {
+		if ( UARTStdioInitFlag == 0 ) {
+		 //
+		 // Enable UART0, to be used as a serial console.
+		 //
+		 SysCtlPeripheralEnable( SYSCTL_PERIPH_GPIOA );
+		 SysCtlPeripheralEnable( SYSCTL_PERIPH_UART0 );
 
-	    //
-	    // Enable UART0, to be used as a serial console.
-	    //
-	    SysCtlPeripheralEnable( SYSCTL_PERIPH_UART0 );
-	    SysCtlPeripheralEnable( SYSCTL_PERIPH_GPIOA );
-
-	    GPIOPinConfigure( GPIO_PA0_U0RX );
-	    GPIOPinConfigure( GPIO_PA1_U0TX );
-	    GPIOPinTypeUART( GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
-
+		 GPIOPinConfigure( GPIO_PA0_U0RX );
+		 GPIOPinConfigure( GPIO_PA1_U0TX );
+		 GPIOPinTypeUART( GPIO_PORTA_BASE, GPIO_PIN_0 | GPIO_PIN_1 );
 	    //
 	    // Initialize the UART standard I/O.
 	    //
@@ -129,7 +125,3 @@ extern uint32_t UART_Initialization() {
     return( 1 );
 
  }
-
- *
- *	End Remove -- GJM B60210
- */
